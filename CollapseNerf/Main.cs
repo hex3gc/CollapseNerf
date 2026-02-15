@@ -41,12 +41,15 @@ namespace CollapseNerf
                     && victimBody.healthComponent
                     && attackerBody.teamComponent 
                     && (attackerBody.teamComponent.teamIndex == TeamIndex.Monster || attackerBody.teamComponent.teamIndex == TeamIndex.Void)
+                    && attackerBody.baseDamage > 0f
                 )
                 {
                     float fractureDamage = attackerBody.baseDamage * 4f;
-                    float collapseLimit = (victimBody.healthComponent.fullCombinedHealth * (Collapse_MaxPercent.Value / 100f)) / 4f;
+                    float fracturePercentOfMaxHealth = fractureDamage / victimBody.healthComponent.fullCombinedHealth;
+                    float maxDamageFraction = Collapse_MaxPercent.Value / 100f;
+                    float finalDamageMultiplier = maxDamageFraction / fracturePercentOfMaxHealth;
                     
-                    self.totalDamage = Math.Min(fractureDamage, collapseLimit);
+                    self.damageMultiplier = Math.Min(1f, finalDamageMultiplier);
                 }
 
                 orig(ref self);
