@@ -28,7 +28,7 @@ namespace CollapseNerf
 
             Log.Info($"Creating hooks...");
 
-            ConfigEntry<float> Collapse_MaxPercent = Instance.Config.Bind(new ConfigDefinition("Collapse nerf", "Max damage percentage"), 10f, new ConfigDescription("Max percentage of an ally's health that collapse can deal. Must be above 0.", null, Array.Empty<object>()));
+            ConfigEntry<float> Collapse_MaxPercent = Instance.Config.Bind(new ConfigDefinition("Collapse nerf", "Max damage percentage"), 20f, new ConfigDescription("Max percentage of an ally's health that collapse can deal. Must be above 0.", null, Array.Empty<object>()));
 
             On.RoR2.DotController.InflictDot_refInflictDotInfo += (orig, ref self) =>
             {
