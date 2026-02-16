@@ -16,7 +16,7 @@ namespace CollapseNerf
     {
         public const string COLLAPSENERF_GUID = "com.Hex3.CollapseNerf";
         public const string COLLAPSENERF_NAME = "CollapseNerf";
-        public const string COLLAPSENERF_VER = "1.0.0";
+        public const string COLLAPSENERF_VER = "1.0.1";
         public static Main Instance;
 
         public void Awake()
@@ -28,7 +28,7 @@ namespace CollapseNerf
 
             Log.Info($"Creating hooks...");
 
-            ConfigEntry<float> Collapse_MaxPercent = Instance.Config.Bind(new ConfigDefinition("Collapse nerf", "Max damage percentage"), 20f, new ConfigDescription("Max percentage of an ally's health that collapse can deal. Must be above 0.", null, Array.Empty<object>()));
+            ConfigEntry<float> Collapse_MaxPercent = Instance.Config.Bind(new ConfigDefinition("Collapse nerf", "Max damage percentage per stack"), 20f, new ConfigDescription("Max percentage of an ally's health that a single stack of collapse can deal. Must be above 0.", null, Array.Empty<object>()));
 
             On.RoR2.DotController.InflictDot_refInflictDotInfo += (orig, ref self) =>
             {
@@ -39,6 +39,8 @@ namespace CollapseNerf
                     && self.attackerObject.TryGetComponent(out CharacterBody attackerBody)
                     && self.victimObject.TryGetComponent(out CharacterBody victimBody)
                     && victimBody.healthComponent
+                    && victimBody.teamComponent
+                    && victimBody.teamComponent.teamIndex == TeamIndex.Player
                     && attackerBody.teamComponent 
                     && (attackerBody.teamComponent.teamIndex == TeamIndex.Monster || attackerBody.teamComponent.teamIndex == TeamIndex.Void)
                     && attackerBody.baseDamage > 0f
